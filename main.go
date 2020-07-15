@@ -14,18 +14,18 @@ import (
 *  Main method to start the Deathstar
  */
 func main() {
-	r := mux.NewRouter()                                                // Create the router, r = router
-	r.HandleFunc("/", HomeHandler)                                      // Set root path handler
-	r.HandleFunc("/api/fleet", fleet.GetAllShipsHandler).Methods("GET") // To retrieve all ships in the fleet
-	r.HandleFunc("/api/fleet", fleet.CreateShipHandler).Methods("POST") // To add a ship into the fleet
-	r.HandleFunc("/api/fleet/id?={id}", TestHandler).Methods("GET")     // Get single ship based on ID
-	r.HandleFunc("/api/fleet/class?={id}", TestHandler).Methods("GET")  // Filter ships based on class
-	r.HandleFunc("/api/fleet/status?={id}", TestHandler).Methods("GET") // Filter ships based on status
-	r.HandleFunc("/api/fleet/name?={id}", TestHandler).Methods("GET")   // Filter ships based on name
-	r.HandleFunc("/api/fleet/id?={id}", TestHandler).Methods("PUT")     // Update existing ship
-	r.HandleFunc("/api/fleet/id?={id}", TestHandler).Methods("DELETE")  // Delete ship
-	r.HandleFunc("/health", HealthCheckHandler).Methods("GET")          // Make sure the server runs fine and returns 200
-	http.Handle("/", r)                                                 // Lets us pass the Handlefunc for route.
+	r := mux.NewRouter()                                                                      // Create the router, r = router
+	r.HandleFunc("/", HomeHandler)                                                            // Set root path handler
+	r.HandleFunc("/api/fleet", fleet.GetAllShipsHandler).Methods("GET")                       // To retrieve all ships in the fleet
+	r.HandleFunc("/api/fleet", fleet.CreateShipHandler).Methods("POST")                       // To add a ship into the fleet
+	r.HandleFunc("/api/fleet/{id}", fleet.GetSingleShipHandler).Methods("GET")                // Get single ship based on ID
+	r.HandleFunc("/api/fleet/filter/class", fleet.GetAllShipsByClassHandler).Methods("GET")   // Filter ships based on class
+	r.HandleFunc("/api/fleet/filter/name", fleet.GetAllShipsByNameHandler).Methods("GET")     // Filter ships based on status
+	r.HandleFunc("/api/fleet/filter/status", fleet.GetAllShipsByStatusHandler).Methods("GET") // Filter ships based on name
+	r.HandleFunc("/api/fleet/{id}", fleet.UpdateShipHandler).Methods("PUT")                   // Update existing ship
+	r.HandleFunc("/api/fleet/{id}", fleet.DeleteShipHandler).Methods("DELETE")                // Delete ship
+	r.HandleFunc("/health", HealthCheckHandler).Methods("GET")                                // Make sure the server runs fine and returns 200
+	http.Handle("/", r)                                                                       // Lets us pass the Handlefunc for route.
 
 	srv := &http.Server{
 		Handler:      r,                // What router to use (middleware)
@@ -40,11 +40,6 @@ func main() {
 // Returning a welcome page for root path
 func HomeHandler(w http.ResponseWriter, r *http.Request) {
 	w.Write([]byte("Welcome to the Deathstar!"))
-}
-
-//Empty handler to return WIP...
-func TestHandler(w http.ResponseWriter, r *http.Request) {
-	w.Write([]byte("WIP..."))
 }
 
 func HealthCheckHandler(w http.ResponseWriter, r *http.Request) {

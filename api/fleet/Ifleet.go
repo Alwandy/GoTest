@@ -1,5 +1,20 @@
 package fleet
 
+// Armament structure, needed another database table to create the armament types and use relationship to assign to a ship armements existing
+// Armaments available:
+/* "armament": [
+	{
+		"title": "Turbo Laser",
+		"qty": "60"
+}, {
+	  "title": "Ion Cannons",
+	  "qty": "60",
+	},
+	{
+	  "title": "Tractor Beam",
+	  "qty": "10",
+}, ]
+*/
 type Armament struct {
 	Title string `json:"title"`
 	Qty   string `json:"qty"`
